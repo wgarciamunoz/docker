@@ -47,3 +47,10 @@ docker container rmi <imagename/imageid> # Remove the image
 # How to view the logs of the running container
 
 docker container logs <containername/id> # to view the logs of the container 
+
+/***** MYSQL  ******/
+
+docker pull mysql:5.7.31
+docker run --name mysqldesarrollo -p 3333:3306 -e MYSQL_ROOT_PASSWORD=Cucuta.2021$ -e MYSQL_DATABASE=datosdb -e MYSQL_USER=wigamu -e MYSQL_PASSWORD=Cucuta.2021$ -d mysql:5.7.31
+docker inspect mysqldev
+mysql -u root -h 172.17.0.4 -pCucuta.2021$
