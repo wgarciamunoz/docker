@@ -51,22 +51,37 @@ docker container logs <containername/id> # to view the logs of the container
 /***** MYSQL  ******/
 
 docker pull mysql:5.7.31
-docker run --name mysqldesarrollo -p 3333:3306 -e MYSQL_ROOT_PASSWORD=Cucuta.2021$ -e MYSQL_DATABASE=datosdb -e MYSQL_USER=wigamu -e MYSQL_PASSWORD=Cucuta.2021$ -d mysql:5.7.31
+docker run --name mysqldesarrollo -p 3333:3306 -e MYSQL_ROOT_PASSWORD=Cucuta.2021$ -e MYSQL_DATABASE=db_soacha -e MYSQL_USER=wigamu -e MYSQL_PASSWORD=Cucuta.2021$ -d mysql:5.7.31
 docker inspect mysqldev
 mysql -u root -h 172.17.0.4 -pCucuta.2021$
 
+CREATE DATABASE db_soacha_gam CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
+
+FLUSH PRIVILEGES;
+
+USE db_soacha_gam;
+GRANT ALL PRIVILEGES ON *.* TO 'wigamu'@'%';
+FLUSH PRIVILEGES;
+
+SELECT user FROM mysql.user;
+
+
+
+docker pull mysql:8.0.27
 
 #Limitar recursos a un contenedor
 docker stats mysqldesarrollo
 free -h
 docker run --help | grep memo # -m
-docker run --name mysqldesarrollo -m "200mb" -p 3333:3306 -e MYSQL_ROOT_PASSWORD=Cucuta.2021$ -e MYSQL_DATABASE=datosdb -e MYSQL_USER=wigamu -e MYSQL_PASSWORD=Cucuta.2021$ -d mysql:5.7.31
+docker run --name mysqldesarrollo --memory "200mb" -p 3333:3306 -e MYSQL_ROOT_PASSWORD=Cucuta.2021$ -e MYSQL_DATABASE=datosdb -e MYSQL_USER=wigamu -e MYSQL_PASSWORD=Cucuta.2021$ -d mysql:5.7.31
 
 #Para mirar cuanta cuántas CPU tenemos en una máquina Linux
 grep "model name" /proc/cpuinfo
 docker run --help | grep cpu #--cpuset-cpus
 
  docker run --name mysqldesarrollo -m "200mb" --cpuset-cpus 0-1 -p 3333:3306 -e MYSQL_ROOT_PASSWORD=Cucuta.2021$ -e MYSQL_DATABASE=datosdb -e MYSQL_USER=wigamu -e MYSQL_PASSWORD=Cucuta.2021$ -d mysql:5.7.31
+ docker run -it -d --name tomcat1 --memory "500mb" -p 8081:8080 tomcat-centos 
+
 
 #Copiar archivos desde nuestra maáquina a un contenedor
 cd /home/centos/docker-images
