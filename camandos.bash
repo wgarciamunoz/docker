@@ -57,3 +57,29 @@ mysql -u root -h 172.17.0.4 -pCucuta.2021$
 
 
 #Limitar recursos a un contenedor
+docker stats mysqldesarrollo
+free -h
+docker run --help | grep memo # -m
+docker run --name mysqldesarrollo -m "200mb" -p 3333:3306 -e MYSQL_ROOT_PASSWORD=Cucuta.2021$ -e MYSQL_DATABASE=datosdb -e MYSQL_USER=wigamu -e MYSQL_PASSWORD=Cucuta.2021$ -d mysql:5.7.31
+
+#Para mirar cuanta cuántas CPU tenemos en una máquina Linux
+grep "model name" /proc/cpuinfo
+docker run --help | grep cpu #--cpuset-cpus
+
+ docker run --name mysqldesarrollo -m "200mb" --cpuset-cpus 0-1 -p 3333:3306 -e MYSQL_ROOT_PASSWORD=Cucuta.2021$ -e MYSQL_DATABASE=datosdb -e MYSQL_USER=wigamu -e MYSQL_PASSWORD=Cucuta.2021$ -d mysql:5.7.31
+
+#Copiar archivos desde nuestra maáquina a un contenedor
+cd /home/centos/docker-images
+touch "hola" > file1.txt
+docker cp file1.txt tomcatcontainer1:/tmp
+docker exec -u root -ti tomcatcontainer1 bash
+
+#Copiar archivos desde el contenedor a la máquina
+
+docker cp tomcatcontainer1:/tmp/file1.txt .
+
+# Convierte un contenedor en una imagen
+# tomar el estado de un contenedor que está corriendo y
+# transformarlo en una imagen.
+
+docker commit tomcatcontainer1 tomcatcontainer1-back
