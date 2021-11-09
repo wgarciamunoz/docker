@@ -98,3 +98,53 @@ docker cp tomcatcontainer1:/tmp/file1.txt .
 # transformarlo en una imagen.
 
 docker commit tomcatcontainer1 tomcatcontainer1-back
+
+# Cuando se borre un contenedor menos las carpetas que me interesan -- VOLUMENES
+
+# Volúmenes de host 
+docker run --name mysqldesarrollo -v /opt/mysql:/var/lib/mysql -m "200mb" --cpuset-cpus 0-1 -p 3333:3306 -e MYSQL_ROOT_PASSWORD=Cucuta.2021$ -e MYSQL_DATABASE=datosdb -e MYSQL_USER=wigamu -e MYSQL_PASSWORD=Cucuta.2021$ -d mysql:5.7.31
+
+# para utilizar otro Dockerfile diferente
+docker build -t test-vol -f Dockerfile2 .
+
+# REDES DOCKER
+docker network ls
+
+
+docker network inspect bridge
+
+
+docker network create test-net
+docker network ls | grep test
+
+docker network create -d bridge --subnet 172.124.10.0/24 --gateway 172.124.10.1 docker-test-net
+
+ docker network inspect docker-test-net
+
+# Agregar contenedores a una red distinta a la por defecto
+docker run --network docker-test-net -dti --name test2 centos
+
+#  Agregar contenedores a una red distinta a la por defecto
+
+docker run --network docker-test-net -dti --name cont1 centos ### 172.124.10.3
+docker run --network docker-test-net -dti --name cont2 centos ### 172.124.10.4
+
+docker exec cont2 bash -c "ping 172.124.10.3"
+
+
+docker run --network test-net -dti --name cont3 centos # "172.18.0.2/16"
+
+# Conectar contenedores en distintas redes
+
+docker network connect
+
+docker network connect docker-test-net cont3
+
+# Desconectar el cont3 de la red docker-test-net
+docker network disconnect docker-test-net cont3
+
+# Eliminar redes
+
+docker network rm test-net
+
+# Asignar IP a un contenedor
