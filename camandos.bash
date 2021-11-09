@@ -148,3 +148,71 @@ docker network disconnect docker-test-net cont3
 docker network rm test-net
 
 # Asignar IP a un contenedor
+
+docker run --network docker-test-net --ip 172.124.10.69 -dti --name cont4 centos
+
+ # La red de Host >> mi maquina
+
+ docker run --network host --ip 172.124.10.69 -dti --name cont5 centos
+
+ # INSTALL DOCKER COMPOSE
+
+sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+sudo chmod +x /usr/local/bin/docker-compose
+
+/usr/local/bin/docker-compose
+
+[centos@centos7 docker-compose]$ cat docker-compose.yml
+version: '3'
+services:
+  web:
+    container_name: ngnix1
+    ports:
+      - "82:80"
+    image: nginx
+
+# vol
+version: '3'
+services:
+
+  #Nginx Service
+  webserver:
+    image: nginx:alpine
+    container_name: webserver
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+       - "vol2:/usr/share/nginx/html"
+    networks:
+      - app-network
+
+  #MySQL Service
+  db:
+    image: mysql:5.7.22
+    container_name: db
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_DATABASE: laravel
+      MYSQL_ROOT_PASSWORD: your_mysql_root_password
+      SERVICE_TAGS: dev
+      SERVICE_NAME: mysql
+    networks:
+      - app-network
+volumes:
+  vol2:
+#Docker Networks
+networks:
+  app-network:
+    driver: bridge
+
+#
+docker-compose up -d # Crear
+
+docker-compose down # eliminar 
+
